@@ -2,7 +2,7 @@
 - 👀 I’m interested in learn coding
 - 🌱 I’m currently learning HTML
 - 💞️ I’m looking to collaborate on coding
-- 📫 How to reach me email
+- 📫 How to reach me:: email
 
 <!---
 alexandreborsato/alexandreborsato is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
