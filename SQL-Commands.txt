@@ -1,0 +1,104 @@
+
+
+                                                      =================     
+                                                        SQL-Commands
+                                                      =================
+
+                                                      
+
+Try it in:  /Users/borsatoa/workdocs/lab/cs50/src0
+Try with the Database: longlist.db
+
+$ sqlite3 yourdbname.db   <ENTER>   << opens sqlite prompt with the db chosen
+sqlite>   Ctrl L    << clear screen
+
+never forget to finish the command with a semi-column (;)
+
+sqlite> .header on        << show the table headers/columns names
+sqlite> .mode table       << show the data into a table format (user friendly)
+sqlite> .nullvalue NULL   << display NULL as NULL (not blank)
+sqlite> .tables           << show / list the tables
+sqlite> .schema           << show / list tables schema
+sqlite> .read schemas/insert/schema.sql   read the schema file: schema.sql and execute it. Below is an example of schema file:
+
+.header on
+.mode table
+.nullvalue NULL
+.tables
+.schema
+ 
+===============================================
+
+CREATE TABLE "collections" (
+    "id" INTEGER,
+    "title" TEXT NOT NULL,
+    "accession_number" TEXT NOT NULL UNIQUE,
+    "acquired" NUMERIC,
+    PRIMARY KEY("id")
+);
+===============================================
+
+
+
+
+sqlite> SELECT "title","format" FROM "longlist" WHERE "year" = 2022 OR "year" = 2023 AND "format" != 'hardcover';
+
+sqlite> SELECT "title","translator" FROM "longlist" WHERE "translator" IS NULL; 
+
+sqlite> SELECT "title","author","translator" FROM "longlist" WHERE "translator" IS NOT NULL;
+
+sqlite> SELECT "title","author","translator" FROM "longlist" WHERE "title" LIKE '%love%';        << the % specifies that doesn´t matter what comes before or after
+
+sqlite> SELECT "title","author","translator" FROM "longlist" WHERE "title" LIKE '%st____%';     << the % combined with _ can make powerfull selection, 
+     <<<  the _ specifies that doesn´t matter what are the caracteres in that position (when I don´t know them)
+
+sqlite> sqlite> SELECT "title","author","translator","year" FROM "longlist" WHERE "year" >= 2019 AND "year" <= 2021;
+
+sqlite> SELECT "title","author","translator","year" FROM "longlist" WHERE "year" BETWEEN 2019 AND 2021;
+
+sqlite> SELECT "title","author","rating","votes","pages" FROM "longlist" WHERE "rating" > 4.0 and "votes" >10000 and "pages" < 300;
+
+sqlite> SELECT "title","author","rating","votes","pages" FROM "longlist" ORDER BY "rating" LIMIT 10;
+
+sqlite> SELECT "title","author","rating","votes","pages" FROM "longlist" ORDER BY "rating" DESC LIMIT 10;   << DESC is ordering from the grathest to smallest
+
+sqlite> SELECT "title","author","rating","votes","pages" FROM "longlist" ORDER BY "rating" DESC, "votes" DESC LIMIT 10;
+
+sqlite> SELECT AVG("rating") FROM "longlist";
+ROUDING::  SELECT ROUND(AVG("rating"), 2) FROM "longlist";
+
+sqlite> SELECT ROUND(AVG("rating"), 2) AS "Average Rating" FROM "longlist";     <<  ROUND = Rounding,  AVG =  Average  and  AS is defining a title for the query 
+
+sqlite> SELECT MAX("rating") AS "Max Rating" FROM "longlist";    //    SELECT MIN("rating") AS "Min Rating" FROM "longlist";
+If want to see both in just one query:::  SELECT MAX("rating") AS "Max Rating", MIN("rating") AS "Min Rating" FROM "longlist";
+
+sqlite> SELECT SUM("votes") AS "Sum of Votes" FROM "longlist";
+
+sqlite> SELECT COUNT(*) AS "Number of Books" FROM "longlist";
+
+sqlite> SELECT DISTINCT "publisher" FROM "longlist";         << DISTINCT is listing just the once each publisher or, it is not listing the same publisher more than once
+
+sqlite> SELECT COUNT(DISTINCT "publisher") AS "Total Amount of Publishers" FROM "longlist";
+
+JOIN
+
+Inner joins combine records from two tables whenever there are matching values in a field common to both tables
+The INNER JOIN keyword selects records that have matching values in both tables
+
+An outer join is a method of combining two or more tables so that the result includes unmatched rows of one of the tables, or of both tables. The matching is based on the join condition.
+
+sqlite> 
+
+sqlite> 
+
+sqlite> 
+
+sqlite> 
+
+sqlite> 
+
+sqlite> 
+
+sqlite> 
+
+
