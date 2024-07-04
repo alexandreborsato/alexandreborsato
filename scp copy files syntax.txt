@@ -1,0 +1,10 @@
+/Users/borsatoa/workdocs/lab/03/
+
+scp -i /path/my-key-pair.pem /path/my-file.txt ec2-user@my-instance-public-dns-name:path/
+
+ABKeyPairIIOpenSSH.pem
+
+ssh -i "ABKeyPairIIOpenSSH.pem" ec2-user@ec2-3-84-66-22.compute-1.amazonaws.com
+
+
+scp -i /Users/borsatoa/workdocs/lab/03/ABKeyPairIIOpenSSH.pem /Users/borsatoa/workdocs/lab/adv-files/*.* ec2-user@ec2-3-84-66-22.compute-1.amazonaws.com:/var/www/html/

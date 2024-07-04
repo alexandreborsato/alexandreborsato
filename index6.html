@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Applicants CRUD</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #333;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            width: 100%;
+        }
+
+        .navbar button {
+            float: left;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+            border: none;
+            background-color: inherit;
+            cursor: pointer;
+        }
+
+        .navbar button:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .main {
+            margin-top: 80px;
+            padding: 20px;
+        }
+
+        .message {
+            color: green;
+            font-weight: bold;
+        }
+
+        input[type=text], input[type=email] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <button id="createBtn">Create</button>
+        <button id="readBtn">Read</button>
+        <button id="updateBtn">Update</button>
+        <button id="deleteBtn">Delete</button>
+    </div>
+
+    <div class="main">
+        <p class="message"></p>
+        <label for="applicantId">Applicant ID:</label>
+        <input type="text" id="applicantId" disabled>
+        <label for="fullName">Full Name:</label>
+        <input type="text" id="fullName">
+        <label for="age">Age:</label>
+        <input type="text" id="age">
+        <label for="address">Address:</label>
+        <input type="text" id="address">
+        <label for="email">Email:</label>
+        <input type="email" id="email">
+        <label for="phone">Phone:</label>
+        <input type="text" id="phone">
+        <button id="confirmBtn">Confirm</button>
+    </div>
+
+    <footer>
+        Please, review all data before confirm. Your applicant will be saved after you select confirm. Thanks.
+    </footer>
+
+    <script>
+        // Initialize SQLite database
+        const db = new SQL.Database('applicants.db');
+
+        // Create table if it doesn't exist
+        db.run(`CREATE TABLE IF NOT EXISTS applicants (
+            applicantID INTEGER PRIMARY KEY AUTOINCREMENT,
+            FullName TEXT,
+            Age INTEGER,
+            Address TEXT,
+            Email TEXT,
+            Phone TEXT
+        )`);
+
+        // Get references to UI elements
+        const createBtn = document.getElementById('createBtn');
+        const readBtn = document.getElementById('readBtn');
+        const updateBtn = document.getElementById('updateBtn');
+        const deleteBtn = document.getElementById('deleteBtn');
+        const confirmBtn = document.getElementById('confirmBtn');
+        const messageEl = document.querySelector('.message');
+        const applicantIdEl = document.getElementById('applicantId');
+        const fullNameEl = document.getElementById('fullName');
+        const ageEl = document.getElementById('age');
+        const addressEl = document.getElementById('address');
+        const emailEl = document.getElementById('email');
+        const phoneEl = document.getElementById('phone');
+
+        // Event listeners for CRUD operations
+        createBtn.addEventListener('click', () => clearInputs('Create'));
+        readBtn.addEventListener('click', () => clearInputs('Read'));
+        updateBtn.addEventListener('click', () => clearInputs('Update'));
+        deleteBtn.addEventListener('click', () => clearInputs('Delete'));
+        confirmBtn.addEventListener('click', performOperation);
+
+        function clearInputs(operation) {
+            messageEl.textContent = '';
+            applicantIdEl.value = '';
+            fullNameEl.value = '';
+            ageEl.value = '';
+            addressEl.value = '';
+            emailEl.value = '';
+            phoneEl.value = '';
+            applicantIdEl.disabled = operation !== 'Update' && operation !== 'Delete';
+        }
+
+        function performOperation() {
+            const fullName = fullNameEl.value;
+            const age = parseInt(ageEl.value);
+            const address = addressEl.value;
+            const email = emailEl.value;
+            const phone = phoneEl.value;
+            const applicantId = parseInt(applicantIdEl.value) || null;
+
+            if (createBtn.style.backgroundColor === 'lightgray') {
+                createApplicant(fullName, age, address, email, phone);
+            } else if (readBtn.style.backgroundColor === 'lightgray') {
+                readApplicant(applicantId);
+            } else if (updateBtn.style.backgroundColor === 'lightgray') {
+                updateApplicant(applicantId, fullName, age, address, email, phone);
+            } else if (deleteBtn.style.backgroundColor === 'lightgray') {
+                deleteApplicant(applicantId);
+            }
+        }
+
+        function createApplicant(fullName, age, address, email, phone) {
+            const stmt = db.prepare('INSERT INTO applicants (FullName, Age, Address, Email, Phone) VALUES (?, ?, ?, ?, ?)');
+            stmt.run(fullName, age, address, email, phone);
+            stmt.finalize();
+            messageEl.textContent = 'Applicant created successfully!';
+            clearInputs('Create');
+        }
+
+        function readApplicant(applicantId) {
+            if (applicantId === null) {
+                messageEl.textContent = 'Please enter an applicant ID.';
+                return;
+            }
+
+            const stmt = db.prepare('SELECT * FROM applicants WHERE applicantID = ?');
+            const applicant = stmt.get(applicantId);
+            stmt.finalize();
+
+            if (applicant) {
+                fullNameEl.value = applicant.FullName;
+                ageEl.value = applicant.Age;
+                addressEl.value = applicant.Address;
+                emailEl.value = applicant.Email;
+                phoneEl.value = applicant.Phone;
+                messageEl.textContent = 'Applicant retrieved successfully!';
+            } else {
+                messageEl.textContent = 'Applicant not found.';
+            }
+        }
+
+        function updateApplicant(applicantId, fullName, age, address, email, phone) {
+            if (applicantId === null) {
+                messageEl.textContent = 'Please enter an applicant ID.';
+                return;
+            }
+
+            const stmt = db.prepare('UPDATE applicants SET FullName = ?, Age = ?, Address = ?, Email = ?, Phone = ? WHERE applicantID = ?');
+            stmt.run(fullName, age, address, email, phone, applicantId);
+            stmt.finalize();
+            messageEl.textContent = 'Applicant updated successfully!';
+            clearInputs('Update');
+        }
+
+        function deleteApplicant(applicantId) {
+            if (applicantId === null) {
+                messageEl.textContent = 'Please enter an applicant ID.';
+                return;
+            }
+
+            const stmt = db.prepare('DELETE FROM applicants WHERE applicantID = ?');
+            stmt.run(applicantId);
+            stmt.finalize();
+            messageEl.textContent = 'Applicant deleted successfully!';
+            clearInputs('Delete');
+        }
+    </script>
+</body>
+</html>

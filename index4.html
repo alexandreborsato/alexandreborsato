@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applicants CRUD</title>
+    <style>
+        /* CSS styles go here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+        }
+        nav {
+            display: flex;
+            justify-content: space-around;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px;
+        }
+        nav a:hover {
+            background-color: #555;
+        }
+        main {
+            margin-top: 80px;
+            padding: 20px;
+        }
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .form-container input {
+            width: 300px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .form-container button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background-color: #555;
+        }
+        .message {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="#" onclick="displayCreateForm()">Create</a>
+            <a href="#" onclick="displayReadForm()">Read</a>
+            <a href="#" onclick="displayUpdateForm()">Update</a>
+            <a href="#" onclick="displayDeleteForm()">Delete</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="message" id="message"></div>
+        <div class="form-container" id="form-container">
+            <input type="text" id="applicantID" placeholder="Applicant ID" />
+            <input type="text" id="fullName" placeholder="Full Name" />
+            <input type="number" id="age" placeholder="Age" />
+            <input type="text" id="address" placeholder="Address" />
+            <input type="email" id="email" placeholder="Email" />
+            <input type="tel" id="phone" placeholder="Phone" />
+            <button onclick="performCRUDOperation()">Confirm</button>
+        </div>
+    </main>
+
+    <footer>
+        <p>Please review all data before confirm. Your applicant will be saved after you select confirm. Thanks.</p>
+    </footer>
+
+    <script>
+        // JavaScript code goes here
+        let db;
+
+        function initializeDatabase() {
+            // Open the SQLite database
+            db = window.openDatabase("applicants.db", "1.0", "Applicants Database", 2 * 1024 * 1024);
+
+            // Create the 'applicants' table if it doesn't exist
+            db.transaction(function(tx) {
+                tx.executeSql('CREATE TABLE IF NOT EXISTS applicants (applicantID INTEGER PRIMARY KEY AUTOINCREMENT, FullName TEXT, Age INTEGER, Address TEXT, Email TEXT, Phone TEXT)');
+            });
+        }
+
+        function displayCreateForm() {
+            // Show the create form and hide other forms
+            document.getElementById('form-container').style.display = 'flex';
+            document.getElementById('message').textContent = '';
+        }
+
+        function displayReadForm() {
+            // Show the read form and hide other forms
+            document.getElementById('form-container').style.display = 'flex';
+            document.getElementById('message').textContent = '';
+        }
+
+        function displayUpdateForm() {
+            // Show the update form and hide other forms
+            document.getElementById('form-container').style.display = 'flex';
+            document.getElementById('message').textContent = '';
+        }
+
+        function displayDeleteForm() {
+            // Show the delete form and hide other forms
+            document.getElementById('form-container').style.display = 'flex';
+            document.getElementById('message').textContent = '';
+        }
+
+        function performCRUDOperation() {
+            let applicantID = document.getElementById('applicantID').value;
+            let fullName = document.getElementById('fullName').value;
+            let age = document.getElementById('age').value;
+            let address = document.getElementById('address').value;
+            let email = document.getElementById('email').value;
+            let phone = document.getElementById('phone').value;
+
+            // Check if the operation is create, read, update, or delete
+            if (document.querySelector('nav a.active').textContent === 'Create') {
+                createApplicant(fullName, age, address, email, phone);
+            } else if (document.querySelector('nav a.active').textContent === 'Read') {
+                readApplicant(applicantID);
+            } else if (document.querySelector('nav a.active').textContent === 'Update') {
+                updateApplicant(applicantID, fullName, age, address, email, phone);
+            } else if (document.querySelector('nav a.active').textContent === 'Delete') {
+                deleteApplicant(applicantID);
+            }
+
+            // Clear the input fields
+            document.getElementById('applicantID').value = '';
+            document.getElementById('fullName').value = '';
+            document.getElementById('age').value = '';
+            document.getElementById('address').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('phone').value = '';
+        }
+
+        function createApplicant(fullName, age, address, email, phone) {
+            db.transaction(function(tx) {
+                tx.executeSql('INSERT INTO applicants (FullName, Age, Address, Email, Phone) VALUES (?, ?, ?, ?, ?)', [fullName, age, address, email, phone], function(tx, result) {
+                    document.getElementById('message').textContent = 'Applicant created successfully.';
+                }, function(tx, error) {
+                    document.getElementById('message').textContent = 'Error creating applicant: ' + error.message;
+                });
+            });
+        }
+
+        function readApplicant(applicantID) {
+            db.transaction(function(tx) {
+                tx.executeSql('SELECT * FROM applicants WHERE applicantID = ?', [applicantID], function(tx, result) {
+                    if (result.rows.length > 0) {
+                        let applicant = result.rows.item(0);
+                        document.getElementById('fullName').value = applicant.FullName;
+                        document.getElementById('age').value = applicant.Age;
+                        document.getElementById('address').value = applicant.Address;
+                        document.getElementById('email').value = applicant.Email;
+                        document.getElementById('phone').value = applicant.Phone;
+                        document.getElementById('message').textContent = 'Applicant found.';
+                    } else {
+                        document.getElementById('message').textContent = 'Applicant not found.';
+                    }
+                }, function(tx, error) {
+                    document.getElementById('message').textContent = 'Error reading applicant: ' + error.message;
+                });
+            });
+        }
+/*
+        function updateApplicant(applicantID, fullName, age, address, email, phone) {
+            db.transaction(function(tx) {
+                */
+                

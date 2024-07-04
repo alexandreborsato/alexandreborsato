@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduQuest - Online Learning Platform</title>
+    <style>
+        /* CSS styles go here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #333;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1;
+        }
+
+        .navbar-links a {
+            color: #fff;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+
+        .hero-section {
+            height: 500px;
+            background: url('placeholder-video.mp4') no-repeat center;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: #fff;
+            text-align: center;
+        }
+
+        .hero-section h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .featured-courses {
+            padding: 50px;
+            text-align: center;
+        }
+
+        .course-card {
+            display: inline-block;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .learning-paths {
+            padding: 50px;
+            text-align: center;
+        }
+
+        .success-stories {
+            padding: 50px;
+            text-align: center;
+        }
+
+        .testimonial {
+            display: inline-block;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .footer a {
+            color: #fff;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <a href="#">EduQuest</a>
+        </div>
+        <div class="navbar-links">
+            <a href="#">Math</a>
+            <a href="#">Science</a>
+            <a href="#">Languages</a>
+            <a href="#">Arts</a>
+            <input type="text" placeholder="Search courses">
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <h1 id="tagline">Learn at your own pace</h1>
+        <button>Get Started</button>
+    </section>
+
+    <section class="featured-courses">
+        <h2>Featured Courses</h2>
+        <div class="course-card">
+            <img src="placeholder-course-image.jpg" alt="Course Image">
+            <h3>Course Title</h3>
+            <p>Instructor Name</p>
+            <p>Course Description</p>
+        </div>
+        <!-- Add more course cards here -->
+    </section>
+
+    <section class="learning-paths">
+        <h2>Find Your Learning Path</h2>
+        <p>Take a short quiz to determine your learning style and interests.</p>
+        <button>Start Quiz</button>
+    </section>
+
+    <section class="success-stories">
+        <h2>Success Stories</h2>
+        <div class="testimonial">
+            <p>"EduQuest has been a game-changer for me. The courses are top-notch, and the instructors are incredibly knowledgeable."</p>
+            <p>- John Doe</p>
+        </div>
+        <!-- Add more testimonials here -->
+    </section>
+
+    <footer class="footer">
+        <div>
+            <a href="#">Blog</a>
+            <a href="#">FAQ</a>
+            <a href="#">Privacy Policy</a>
+            <button>Contact Us</button>
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript code goes here
+        const tagline = document.getElementById('tagline');
+        const taglines = ['Learn at your own pace', 'Discover new passions', 'Expand your horizons'];
+        let currentTaglineIndex = 0;
+
+        function rotateTagline() {
+            tagline.textContent = taglines[currentTaglineIndex];
+            currentTaglineIndex = (currentTaglineIndex + 1) % taglines.length;
+        }
+
+        setInterval(rotateTagline, 3000);
+    </script>
+</body>
+</html>
+
+/*
+```
+
+This HTML file includes the structure and basic styling for the EduQuest online learning platform website. The CSS styles are embedded in the `<style>` tag within the `<head>` section, and the JavaScript code for rotating the tagline in the hero section is placed in the `<script>` tag at the end of the `<body>` section.
+
+The website features a fixed navigation bar with links to course categories and a search bar, a hero section with a video background and rotating tagline, a featured courses section with placeholder course cards, an interactive "Learning Paths" section with a button to start a quiz, a "Success Stories" section with testimonials, and a footer with links and a "Contact Us" button.
+
+The JavaScript code uses the `setInterval` function to rotate the tagline every 3 seconds by updating the text content of the `<h1>` element with the `id="tagline"`.
+
+You can customize the styles, add additional content and functionality, and further enhance the design and interactivity of the website as needed.
+
+*/

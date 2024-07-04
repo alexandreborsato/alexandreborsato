@@ -1,0 +1,3 @@
+ls -a will list all files including hidden files (files with names beginning with a dot).
+ls -F gives a full listing, indicating what type files are by putting a slash after directories and a star after executable files (programs you can run).
+ls -l gives a long listing of all files. Here is an example section of the output of ls -l
